@@ -29,6 +29,14 @@ Vite and Tailwind CSS 4, prerendered to static HTML and hosted on Vercel.
 | SEO | Title, description, Open Graph | Plus `hreflang`, `BarOrPub` structured data, sitemap, robots |
 | Security headers | HSTS, `nosniff`, referrer policy | Plus a Content Security Policy, frame and permissions policies (`vercel.json`) |
 
+## Results on the live site
+
+- Lighthouse performance, mobile: 96 (Lovable prototype: 76), median of 5 runs each. Desktop: 100 (prototype: 88).
+- Accessibility 97, best practices 100, SEO 100.
+- `tests/smoke.mjs`: 9/9 checks pass against https://roots-pula.vercel.app.
+- On a phone the first screen loads the hero, the first drink photo and the fonts; the gallery waits until it is
+  about a screen away and the menu's other photos until the page has finished loading.
+
 ## Run it
 
 ```bash
