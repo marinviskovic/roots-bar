@@ -1,6 +1,6 @@
 # Roots, a cocktail bar website (concept)
 
-**Live:** https://roots-bar.vercel.app (English) and https://roots-bar.vercel.app/hr/ (Croatian)
+**Live:** https://roots-pula.vercel.app (English) and https://roots-pula.vercel.app/hr/ (Croatian)
 
 A one-page website for a cocktail bar in Pula, Croatia. Roots is a concept made for a portfolio: the bar, the menu and
 the prices are invented, and the footer says so.

@@ -10,7 +10,7 @@ const { render, LOCALES, localePath } = await import(pathToFileURL(resolve(root,
 
 // SITE_URL wins; on Vercel the project's production address is the fallback, so links are right before a domain exists.
 const site = (process.env.SITE_URL
-  ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "https://roots-bar.vercel.app")
+  ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "https://roots-pula.vercel.app")
 ).replace(/\/$/, "");
 const url = locale => site + localePath(locale);
 
