@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import type { Cocktail } from "@/data/cocktails";
-import { keepShortWords } from "@/lib";
+import { useTypeset } from "@/i18n";
 
 /**
  * Photo of the selected drink with its caption. Two stacked <img> elements swap
@@ -9,6 +9,7 @@ import { keepShortWords } from "@/lib";
  * old one slides out, so the frame never flashes empty.
  */
 export function CocktailPhoto({ item, categoryLabel, direction, mobile = false }: { item: Cocktail; categoryLabel: string; direction: number; mobile?: boolean }) {
+  const keepShortWords = useTypeset();
   const initial = useRef(item);
   const [displayed, setDisplayed] = useState({ item, categoryLabel });
   const first = useRef<HTMLImageElement>(null);

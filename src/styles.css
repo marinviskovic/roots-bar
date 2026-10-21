@@ -86,6 +86,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outli
 .desktop-nav > a[aria-current], .mobile-menu-links > a[aria-current] { color: var(--foreground); }
 .fosfor-wordmark:active, .desktop-nav > a:active, .mobile-menu-links > a:active { opacity: 0.7; }
 .mobile-menu-trigger { display: none !important; }
+.navbar-end { display: none; align-items: center; gap: 4px; }
+.language-link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-left: 0.16em; font-family: var(--font-mono); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted-foreground); transition: color 150ms ease; }
+.language-link:active { opacity: 0.7; }
 .menu-overlay { position: fixed; inset: 0; z-index: 50; background: var(--nav-fallback); }
 .mobile-menu { position: fixed; inset: 0; z-index: 51; overflow-y: auto; overscroll-behavior: contain; color: var(--foreground); animation: menu-enter 220ms var(--ease-drawer); }
 .mobile-menu[data-state="closed"], .menu-overlay[data-state="closed"] { animation: menu-exit 150ms var(--ease-out); }
@@ -115,6 +118,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outli
 @keyframes menu-exit { to { opacity: 0; } }
 @media (hover: hover) and (pointer: fine) {
   .desktop-nav > a:not(.fosfor-button):hover, .mobile-menu-links > a:not(.fosfor-button):hover { color: var(--foreground); }
+  .language-link:hover { color: var(--foreground); }
   .fosfor-button:hover { border-color: var(--primary); color: var(--primary); }
   .fosfor-story-link:hover { text-decoration-color: var(--primary); }
   .fosfor-icon-button:hover { background: var(--surface); }
@@ -125,6 +129,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outli
   .fosfor-navbar[data-over-wall="true"] { background: transparent; border-bottom-color: transparent; -webkit-backdrop-filter: blur(0px) saturate(100%); backdrop-filter: blur(0px) saturate(100%); }
   .desktop-nav { display: none; }
   .mobile-menu-trigger { display: inline-flex !important; }
+  .navbar-end { display: flex; }
   .fosfor-hero { --hero-wall: 40px; min-height: 0; overflow: hidden; }
   /* The photo's top 28% is bare wall. Grow the photo from the bottom edge so only a strip of wall (--hero-wall)
      shows under the navigation on every phone, and keep the name ring on the same spot of the neon. */

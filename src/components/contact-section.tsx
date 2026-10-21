@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { PulaMap } from "@/components/pula-map";
+import { useCopy } from "@/i18n";
 
-const hours = [
-  { days: [1, 2, 3, 4], label: "Ponedjeljak - četvrtak", time: "18-01 h" },
-  { days: [5, 6], label: "Petak i subota", time: "18-02 h" },
-  { days: [0], label: "Nedjelja", time: "18-24 h" },
-];
+/** Weekdays (0 = Sunday) for each row of opening hours; the labels and times are in i18n.ts. */
+const rows = [[1, 2, 3, 4], [5, 6], [0]];
 
 const OPENS = 18;
 /** Closing hour per weekday (0 = Sunday), counted from that day's midnight, so 25 means 1 am the next night. */
@@ -13,11 +11,19 @@ const CLOSES = [24, 25, 25, 25, 25, 26, 26];
 
 type Status = { open: boolean; minutes: number; day: number };
 
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const pulaClock = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Zagreb", weekday: "short", hour: "numeric", minute: "numeric", hourCycle: "h23" });
+
+/** The bar keeps Pula time, whatever time zone the visitor's phone is in. */
+function pulaTime(now: Date) {
+  const parts = Object.fromEntries(pulaClock.formatToParts(now).map(part => [part.type, part.value]));
+  return { day: WEEKDAYS.indexOf(parts.weekday), hour: Number(parts.hour) + Number(parts.minute) / 60 };
+}
+
 /** Bar nights run past midnight, so after midnight the bar can still be open on the previous evening's hours. */
 function barStatus(now: Date): Status {
-  const day = now.getDay();
+  const { day, hour } = pulaTime(now);
   const yesterday = (day + 6) % 7;
-  const hour = now.getHours() + now.getMinutes() / 60;
   const until = (end: number) => Math.round((end - hour) * 60);
   if (hour < CLOSES[yesterday] - 24) return { open: true, minutes: until(CLOSES[yesterday] - 24), day: yesterday };
   if (hour >= OPENS) return { open: true, minutes: until(CLOSES[day]), day };
@@ -31,6 +37,7 @@ function duration(minutes: number) {
 }
 
 export function ContactSection() {
+  const t = useCopy().visit;
   const [status, setStatus] = useState<Status | null>(null);
   useEffect(() => {
     const update = () => setStatus(barStatus(new Date()));
@@ -39,25 +46,25 @@ export function ContactSection() {
     return () => window.clearInterval(timer);
   }, []);
   return (
-    <section id="kontakt" className="contact-section" aria-label="Kontakt">
+    <section id="visit" className="contact-section" aria-label={t.label}>
       <div>
         <div className="contact-hours-heading">
-          <h2>Radno vrijeme</h2>
+          <h2>{t.hoursTitle}</h2>
           <div className="contact-sign" data-open={status?.open} aria-live="polite">
             {status && <>
-              <p className="contact-sign-label" key={String(status.open)}>{status.open ? "Otvoreno" : "Zatvoreno"}</p>
-              <p className="contact-sign-countdown">{status.open ? `Zatvaramo za ${duration(status.minutes)}` : `Otvaramo za ${duration(status.minutes)}`}</p>
+              <p className="contact-sign-label" key={String(status.open)}>{status.open ? t.open : t.closed}</p>
+              <p className="contact-sign-countdown">{`${status.open ? t.closesIn : t.opensIn} ${duration(status.minutes)}`}</p>
             </>}
           </div>
         </div>
         <dl className="contact-hours">
-          {hours.map(row => <div key={row.label} className={status && row.days.includes(status.day) ? "contact-today" : undefined}><dt>{row.label}</dt><dd>{row.time}</dd></div>)}
+          {rows.map((days, index) => <div key={index} className={status && days.includes(status.day) ? "contact-today" : undefined}><dt>{t.hours[index]}</dt><dd>{t.times[index]}</dd></div>)}
         </dl>
       </div>
       <div>
-        <h2>Gdje smo</h2>
-        <p className="contact-place">Pula, centar</p>
-        <p className="contact-note">Ovo je koncept, bar ne postoji pa nema ni adrese.</p>
+        <h2>{t.whereTitle}</h2>
+        <p className="contact-place">{t.place}</p>
+        <p className="contact-note">{t.concept}</p>
         <PulaMap />
       </div>
     </section>

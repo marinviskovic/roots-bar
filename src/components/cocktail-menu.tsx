@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { CocktailPhoto } from "@/components/cocktail-photo";
-import { cocktailCategories } from "@/data/cocktails";
-import { keepShortWords } from "@/lib";
+import { cocktailCategories as categoriesFor } from "@/data/cocktails";
+import { useCopy, useLocale, useTypeset } from "@/i18n";
 
 export function CocktailMenu() {
+  const locale = useLocale();
+  const t = useCopy().menu;
+  const keepShortWords = useTypeset();
+  const cocktailCategories = categoriesFor(locale);
   const [categoryId, setCategoryId] = useState(cocktailCategories[0].id);
   const [selected, setSelected] = useState(0);
   const [desktop, setDesktop] = useState(true);
@@ -51,11 +55,11 @@ export function CocktailMenu() {
     setSelected(index);
   }
 
-  return <section ref={section} id="karta" className="cocktail-section" aria-labelledby="cocktail-title">
-    <h2 id="cocktail-title">Koktel karta</h2>
+  return <section ref={section} id="menu" className="cocktail-section" aria-labelledby="cocktail-title">
+    <h2 id="cocktail-title">{t.title}</h2>
     <Tabs.Root value={categoryId} onValueChange={changeCategory}>
       <div className="cocktail-filter-scroll">
-        <Tabs.List className="cocktail-filters" aria-label="Kategorije koktela">
+        <Tabs.List className="cocktail-filters" aria-label={t.categories}>
           {cocktailCategories.map(value => <Tabs.Trigger key={value.id} value={value.id} className="cocktail-filter">{value.label}</Tabs.Trigger>)}
         </Tabs.List>
       </div>
@@ -64,7 +68,7 @@ export function CocktailMenu() {
         <div className="cocktail-menu-body">
           <div className="cocktail-panels">
             {cocktailCategories.map(value => <Tabs.Content key={value.id} value={value.id} className="cocktail-panel">
-              <ul className="cocktail-list" role="radiogroup" aria-label={value.id === "autorski" ? "Autorski kokteli" : value.label}>
+              <ul className="cocktail-list" role="radiogroup" aria-label={value.listLabel}>
                 {value.items.map((item, index) => {
                   const active = value.id === categoryId && selected === index;
                   return <li key={item.name} className="cocktail-item" data-selected={active}>
@@ -82,7 +86,7 @@ export function CocktailMenu() {
               </ul>
             </Tabs.Content>)}
           </div>
-          <p className="cocktail-note">Cijene su u eurima. Za alergije pitaj barmena.</p>
+          <p className="cocktail-note">{t.note}</p>
         </div>
       </div>
     </Tabs.Root>

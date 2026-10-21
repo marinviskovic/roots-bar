@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Martini } from "lucide-react";
 import desktopImage from "@/assets/fosfor-bar-desktop.webp";
 import mobileImage from "@/assets/fosfor-bar-mobile.webp";
+import { useCopy } from "@/i18n";
 
 const TOP = 17;
 const RADIUS = 83;
@@ -31,6 +32,8 @@ function namePath(length: number, bend: number) {
 }
 
 export function Hero() {
+  const copy = useCopy();
+  const t = copy.hero;
   const orbit = useRef<HTMLDivElement>(null);
   const path = useRef<SVGPathElement>(null);
   const name = useRef<SVGTextPathElement>(null);
@@ -66,26 +69,26 @@ export function Hero() {
     <section className="fosfor-hero" aria-labelledby="hero-title">
       <picture className="hero-picture">
         <source media="(max-width: 767px)" srcSet={mobileImage} />
-        <img src={desktopImage} alt="Intimni koktel bar noću, gosti za šankom i crveno-narančaste neonske linije iza barmena." width={2400} height={1350} loading="eager" fetchPriority="high" />
+        <img src={desktopImage} alt={t.photoAlt} width={2400} height={1350} loading="eager" fetchPriority="high" />
       </picture>
       <div className="hero-shade" aria-hidden="true" />
-      <div ref={orbit} className="fosfor-orbit" role="img" aria-label="ROOTS, koktel bar, Pula">
+      <div ref={orbit} className="fosfor-orbit" role="img" aria-label={t.ringLabel}>
         <svg className="orbit-type" viewBox="0 0 200 200" aria-hidden="true">
           <defs><path ref={path} id="orbit-circle" d={namePath(STRAIGHT, 0)} /></defs>
           <text>
             <textPath ref={name} href="#orbit-circle" textLength={STRAIGHT} lengthAdjust="spacing">
-              ROOTS • KOKTEL BAR • PULA<tspan ref={tail} fillOpacity={0}>{" • "}</tspan>
+              {t.ring}<tspan ref={tail} fillOpacity={0}>{" • "}</tspan>
             </textPath>
           </text>
         </svg>
         <Martini className="orbit-martini" aria-hidden="true" strokeWidth={1.4} />
       </div>
       <div className="hero-content">
-        <h1 id="hero-title"><span>Kokteli do kasno</span><span>u srcu Pule</span></h1>
-        <p>Autorski kokteli, klasici i bezalkoholna karta. Bez rezervacije, samo dođi.</p>
+        <h1 id="hero-title">{t.title.map(line => <span key={line}>{line}</span>)}</h1>
+        <p>{t.intro}</p>
         <div className="hero-actions">
-          <a className="fosfor-button" href="#karta">Koktel karta</a>
-          <a className="fosfor-story-link" href="#prica">Priča o Palomi</a>
+          <a className="fosfor-button" href="#menu">{copy.nav.menu}</a>
+          <a className="fosfor-story-link" href="#story">{t.story}</a>
         </div>
       </div>
     </section>

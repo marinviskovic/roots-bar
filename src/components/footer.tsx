@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { useCopy } from "@/i18n";
 
 export function Footer() {
+  const t = useCopy().footer;
   const signature = useRef<HTMLDivElement>(null);
   const [lit, setLit] = useState(false);
 
@@ -18,16 +20,16 @@ export function Footer() {
   return (
     <footer className="fosfor-footer">
       <div className="footer-main">
-        <p className="footer-concept">Koncept stranice za portfolio. Roots nije stvarni bar.</p>
-        <a className="footer-credit" href="https://www.instagram.com/webradiona.hr/" target="_blank" rel="noopener">Izrada: Webradiona</a>
+        <p className="footer-concept">{t.concept}</p>
+        <a className="footer-credit" href="https://www.instagram.com/webradiona.hr/" target="_blank" rel="noopener">{t.credit}</a>
       </div>
-      <p className="footer-age">Alkohol se ne poslužuje osobama mlađim od 18 godina.</p>
+      <p className="footer-age">{t.age}</p>
       <div ref={signature} className="footer-signature" data-lit={lit}>
-        <p className="footer-label">Koktel bar, Pula</p>
+        <p className="footer-label">{t.label}</p>
         <p className="footer-wordmark" aria-hidden="true">
           <span>{"ROOTS".split("").map((letter, index) => <span key={index} className="footer-letter" style={{ ["--letter-delay" as string]: `${index * 220}ms` }}>{letter}</span>)}</span>
         </p>
-        <p className="footer-farewell">Vidimo se večeras.</p>
+        <p className="footer-farewell">{t.farewell}</p>
       </div>
     </footer>
   );

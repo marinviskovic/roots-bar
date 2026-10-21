@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import desktopImage from "@/assets/paloma-story-desktop.webp";
 import mobileImage from "@/assets/paloma-story-mobile.webp";
-import { keepShortWords } from "@/lib";
-
-const paragraphs = [
-  "Paloma je meksička klasika od tekile, grejpa i limete, a u Rootsu smo složili svoju: jedinstvenu i nezaobilaznu.",
-  "Ružičasti grejp cijedimo svaku večer, rub čaše solimo morskom soli, a na vrh ide hladni gazirani grejp koji je drži živom do zadnjeg gutljaja.",
-];
+import { useCopy, useTypeset } from "@/i18n";
 
 export function StorySection() {
+  const t = useCopy().story;
+  const keepShortWords = useTypeset();
   const section = useRef<HTMLElement>(null);
   const [motion, setMotion] = useState<"static" | "scroll" | "fallback">("static");
 
@@ -42,17 +39,17 @@ export function StorySection() {
     return () => { observer?.disconnect(); media.removeEventListener("change", update); };
   }, []);
 
-  return <section id="prica" ref={section} className="story-section" data-motion={motion} aria-labelledby="story-title">
+  return <section id="story" ref={section} className="story-section" data-motion={motion} aria-labelledby="story-title">
     <picture className="story-picture">
       <source media="(max-width: 767px)" srcSet={mobileImage} />
-      <img src={desktopImage} alt="Blijedo ružičasta Paloma u visokoj čaši s prozirnim štapićem leda, solju na pola ruba i kriškom grejpa na tamnom šanku, uz crveno-narančasti neon." width={1792} height={1024} loading="lazy" decoding="async" />
+      <img src={desktopImage} alt={t.photoAlt} width={1792} height={1024} loading="lazy" decoding="async" />
     </picture>
     <div className="story-shade" aria-hidden="true" />
     <div className="story-content">
-      <p className="story-eyebrow">Autorski koktel</p>
-      <h2 id="story-title">Naša Paloma</h2>
+      <p className="story-eyebrow">{t.eyebrow}</p>
+      <h2 id="story-title">{t.title}</h2>
       <div className="story-copy">
-        {paragraphs.map((paragraph, index) => {
+        {t.paragraphs.map((paragraph, index) => {
           const text = keepShortWords(paragraph);
           const words = text.split(" ");
           return <p className="story-paragraph" key={index}>
@@ -64,7 +61,7 @@ export function StorySection() {
           </p>;
         })}
       </div>
-      <p className="story-sign">Ne propusti priliku da je probaš.</p>
+      <p className="story-sign">{t.sign}</p>
     </div>
   </section>;
 }

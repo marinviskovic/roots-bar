@@ -4,19 +4,23 @@ import friends from "@/assets/fosfor-atmosfera-drustvo.webp";
 import lemonade from "@/assets/cocktail-limunada-bosiljak.webp";
 import negroni from "@/assets/cocktail-negroni.webp";
 import counter from "@/assets/fosfor-atmosfera-case.webp";
+import { useCopy } from "@/i18n";
 
 // Each answer gets a small photo from the bar; it reveals each time the answer opens (the answer mounts on open).
-const questions = [
-  { question: "Primate li rezervacije?", answer: "Ne primamo. Stolovi i šank su za one koji prvi dođu, a za šankom se mjesto uvijek brzo nađe.", image: friends, position: "30% 70%" },
-  { question: "Imate li bezalkoholne koktele?", answer: "Imamo, na karti su pod Bez alkohola.", image: lemonade, position: "50% 40%" },
-  { question: "Zašto velika kocka leda?", answer: "Topi se sporije, pa koktel ostaje hladan, a ne vodenast, do zadnjeg gutljaja. Led smrzavamo i režemo sami.", image: negroni, position: "50% 38%" },
-  { question: "Primate li kartice?", answer: "Da, gotovinu i kartice.", image: counter, position: "50% 75%" },
+// The questions are in i18n.ts, in the same order.
+const photos = [
+  { image: friends, position: "30% 70%" },
+  { image: lemonade, position: "50% 40%" },
+  { image: negroni, position: "50% 38%" },
+  { image: counter, position: "50% 75%" },
 ];
 
 export function FaqSection() {
+  const t = useCopy().faq;
+  const questions = t.items.map((item, index) => ({ ...item, ...photos[index] }));
   return (
-    <section id="cesta-pitanja" className="faq-section" aria-labelledby="faq-title">
-      <h2 id="faq-title">Česta pitanja</h2>
+    <section id="faq" className="faq-section" aria-labelledby="faq-title">
+      <h2 id="faq-title">{t.title}</h2>
       <Accordion.Root type="single" collapsible>
         {questions.map(({ question, answer, image, position }, index) => (
           <Accordion.Item key={question} value={`question-${index}`} className="faq-item">

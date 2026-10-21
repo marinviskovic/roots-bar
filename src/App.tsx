@@ -6,11 +6,12 @@ import { ContactSection } from "@/components/contact-section";
 import { FaqSection } from "@/components/faq-section";
 import { StorySection } from "@/components/story-section";
 import { Footer } from "@/components/footer";
+import { copy, LocaleProvider, type Locale } from "@/i18n";
 
-export function App() {
+export function App({ locale }: { locale: Locale }) {
   return (
-    <>
-      <a className="skip-link" href="#karta">Preskoči na koktel kartu</a>
+    <LocaleProvider value={locale}>
+      <a className="skip-link" href="#menu">{copy[locale].skipLink}</a>
       <Navbar />
       <main>
         <Hero />
@@ -21,6 +22,6 @@ export function App() {
         <StorySection />
       </main>
       <Footer />
-    </>
+    </LocaleProvider>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useCopy } from "@/i18n";
 
 // A hand-drawn sketch of central Pula, not a real map: harbour on the west, the round old town
 // around the Kaštel hill, the Arena to the north and the Golden Gate to the south-east.
@@ -6,6 +7,7 @@ const hill = { x: 214, y: 160 };
 const roots = { x: 168, y: 228 };
 
 export function PulaMap() {
+  const t = useCopy().map;
   const figure = useRef<HTMLElement>(null);
   const [drawn, setDrawn] = useState(false);
 
@@ -21,7 +23,7 @@ export function PulaMap() {
 
   return (
     <figure ref={figure} className="pula-map" data-drawn={drawn}>
-      <svg viewBox="0 0 400 300" role="img" aria-label="Skica centra Pule: luka, stari grad oko Kaštela, Arena i Roots na južnoj strani starog grada.">
+      <svg viewBox="0 0 400 300" role="img" aria-label={t.label}>
         <path className="map-sea" d="M0 0 H132 C126 40 124 70 116 96 C106 130 98 160 84 192 C70 222 46 248 0 268 Z" />
         <g className="map-waves">
           <path d="M18 70 q8 -5 16 0 t16 0" /><path d="M40 130 q8 -5 16 0 t16 0" /><path d="M14 190 q8 -5 16 0 t16 0" />
@@ -44,11 +46,11 @@ export function PulaMap() {
         <path className="map-landmark" d="M276 218 v-10 a6 6 0 0 1 12 0 v10" />
         <rect className="map-landmark" x="128" y="152" width="16" height="12" />
         <g className="map-labels">
-          <text x="34" y="104" className="map-label-sea">LUKA</text>
+          <text x="34" y="104" className="map-label-sea">{t.harbour}</text>
           <text x="226" y="38">ARENA</text>
           <text x={hill.x} y={hill.y + 32} textAnchor="middle">KAŠTEL</text>
           <text x="146" y="144" textAnchor="middle">FORUM</text>
-          <text x="294" y="228">ZLATNA VRATA</text>
+          <text x="294" y="228">{t.gate}</text>
         </g>
         <g className="map-roots">
           <circle className="map-pulse" cx={roots.x} cy={roots.y} r="7" />
@@ -57,7 +59,7 @@ export function PulaMap() {
           <text x={roots.x - 14} y={roots.y + 4} textAnchor="end" className="map-label-roots">ROOTS</text>
         </g>
       </svg>
-      <figcaption>U starom gradu, ispod Kaštela</figcaption>
+      <figcaption>{t.caption}</figcaption>
     </figure>
   );
 }

@@ -4,17 +4,21 @@ import bartender from "@/assets/fosfor-atmosfera-barmen.webp";
 import toast from "@/assets/fosfor-atmosfera-zdravica.webp";
 import glasses from "@/assets/fosfor-atmosfera-case.webp";
 import friends from "@/assets/fosfor-atmosfera-drustvo.webp";
+import { useCopy } from "@/i18n";
 
 // One evening in the bar, told in five photos.
-const photos = [
-  { src: neon, time: "19:02", caption: "Neon se pali", alt: "Detalj crveno-narančastih neonskih linija na tamnom zidu bara Roots." },
-  { src: bartender, time: "21:40", caption: "Prva tura iz shakera", alt: "Ruke barmena koji miješa koktel u metalnom shakeru pod neonskim svjetlom." },
-  { src: toast, time: "22:55", caption: "Zdravica za stolom", alt: "Ruke gostiju koje nazdravljaju narančastim koktelima za stolom." },
-  { src: glasses, time: "23:30", caption: "Tri čaše, jedan šank", alt: "Tri čaše koktela na šanku s crveno-narančastim neonskim odsjajem." },
-  { src: friends, time: "01:10", caption: "Još jedna, pa doma", alt: "Društvo snimljeno s leđa za stolom u polumraku bara Roots." },
+// Captions and descriptions are in i18n.ts, in the same order.
+const shots = [
+  { src: neon, time: "19:02" },
+  { src: bartender, time: "21:40" },
+  { src: toast, time: "22:55" },
+  { src: glasses, time: "23:30" },
+  { src: friends, time: "01:10" },
 ];
 
 export function AtmosphereSection() {
+  const t = useCopy().evening;
+  const photos = shots.map((shot, index) => ({ ...shot, ...t.photos[index] }));
   const section = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
@@ -57,9 +61,9 @@ export function AtmosphereSection() {
   const current = photos[active ?? 0];
 
   return (
-    <section id="atmosfera" ref={section} className="atmosphere-section" data-seen={seen} aria-labelledby="atmosphere-title">
+    <section id="evening" ref={section} className="atmosphere-section" data-seen={seen} aria-labelledby="atmosphere-title">
       <div className="atmosphere-heading">
-        <h2 id="atmosphere-title">Večer u Rootsu</h2>
+        <h2 id="atmosphere-title">{t.title}</h2>
         <p className="atmosphere-clock" aria-hidden="true"><span key={current.time}>{current.time}</span></p>
       </div>
       <div
@@ -67,7 +71,7 @@ export function AtmosphereSection() {
         className="atmosphere-track"
         data-focus={active !== null}
         role="region"
-        aria-label="Fotografije atmosfere bara Roots"
+        aria-label={t.gallery}
         tabIndex={0}
         onPointerLeave={() => { if (!swipe) setActive(null); }}
       >
