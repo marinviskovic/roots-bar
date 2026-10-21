@@ -118,8 +118,8 @@ export function CocktailPhoto({ item, categoryLabel, direction, mobile = false }
 
   return <figure className="cocktail-preview" data-drink={displayed.item.name}>
     <div className="cocktail-photo-frame">
-      <img ref={first} src={initial.current.image} alt={initial.current.alt} width={1024} height={1280} />
-      <img ref={second} className="cocktail-photo-buffer" src={initial.current.image} alt="" aria-hidden="true" width={1024} height={1280} />
+      <img ref={first} src={initial.current.image} alt={initial.current.alt} width={1024} height={1280} fetchPriority="low" />
+      <img ref={second} className="cocktail-photo-buffer" src={initial.current.image} alt="" aria-hidden="true" width={1024} height={1280} fetchPriority="low" />
     </div>
     <figcaption ref={caption} aria-live="polite">
       <span className="cocktail-caption-category">{displayed.categoryLabel}</span>

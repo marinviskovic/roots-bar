@@ -38,11 +38,17 @@ export function CocktailMenu() {
   }, []);
   useEffect(() => {
     if (!visible) return;
-    for (const item of category.items) {
-      const image = new Image();
-      image.src = item.image;
-      void image.decode().catch(() => {});
-    }
+    const preload = () => {
+      for (const item of category.items) {
+        const image = new Image();
+        image.src = item.image;
+        void image.decode().catch(() => {});
+      }
+    };
+    // On phones the menu starts right under the hero; wait for the first screen to finish loading.
+    if (document.readyState === "complete") { preload(); return; }
+    window.addEventListener("load", preload, { once: true });
+    return () => window.removeEventListener("load", preload);
   }, [visible, category]);
 
   function changeCategory(id: string) {

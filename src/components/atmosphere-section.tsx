@@ -23,6 +23,7 @@ export function AtmosphereSection() {
   const track = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
   const [seen, setSeen] = useState(false);
+  const [near, setNear] = useState(false);
   const [swipe, setSwipe] = useState(false);
 
   // Photos light up one after another as soon as the section starts to scroll into view.
@@ -32,6 +33,17 @@ export function AtmosphereSection() {
     const observer = new IntersectionObserver(entries => {
       if (entries.some(entry => entry.isIntersecting)) { setSeen(true); observer.disconnect(); }
     }, { threshold: 0 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  // The photos start loading about a screen before the section, so they don't compete with the first screen.
+  useEffect(() => {
+    const element = section.current;
+    if (!element || !("IntersectionObserver" in window)) { setNear(true); return; }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { setNear(true); observer.disconnect(); }
+    }, { rootMargin: "100% 0px" });
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
@@ -75,8 +87,8 @@ export function AtmosphereSection() {
         tabIndex={0}
         onPointerLeave={() => { if (!swipe) setActive(null); }}
       >
-        {/* Not lazy: on phones most photos sit off to the side of the swipe track, where lazy loading waits until
-            they are swiped in. Low priority keeps them from slowing the first screen. */}
+        {/* Not loading="lazy": on phones most photos sit off to the side of the swipe track, where lazy loading waits
+            until they are swiped in. They get their src once the section is near instead (see above). */}
         {photos.map((photo, index) => (
           <figure
             key={photo.src}
@@ -85,7 +97,7 @@ export function AtmosphereSection() {
             style={{ ["--reveal-delay" as string]: `${index * 70}ms` }}
             onPointerEnter={event => { if (!swipe && event.pointerType === "mouse") setActive(index); }}
           >
-            <img src={photo.src} alt={photo.alt} width={800} height={1000} fetchPriority="low" decoding="async" />
+            <img src={near ? photo.src : undefined} alt={photo.alt} width={800} height={1000} fetchPriority="low" decoding="async" />
             <figcaption><span className="atmosphere-time">{photo.time}</span><span>{photo.caption}</span></figcaption>
           </figure>
         ))}
